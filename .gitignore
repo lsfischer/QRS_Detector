@@ -1,0 +1,13 @@
+./Transfer_Learning/data/
+./Transfer_Learning/data
+./QRS_Detector/data/
+./QRS_Detector/data
+.idea
+.code
+*.pdf
+QRS_Detector/data/*
+QRS_Detector/data*
+*.atr
+*.hea
+*.dat
+*.npy

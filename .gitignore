@@ -11,3 +11,13 @@ QRS_Detector/data*
 *.hea
 *.dat
 *.npy
+logs/
+Transfer_Learning/logs/
+./Transfer_Learning/logs/
+Transfer_Learning/logs
+./Transfer_Learning/logs
+QRS_Detector/logs/
+./QRS_Detector/logs/
+QRS_Detector/logs
+./QRS_Detector/logs
+~                             

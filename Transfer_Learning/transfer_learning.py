@@ -139,4 +139,8 @@ model = Model(inputs=old_model.get_layer("inputs").output, outputs=layer)
 model.compile(optimizer=SGD(lr=1e-2, momentum=0.9), loss="categorical_crossentropy",
               metrics=["accuracy"])
 
+# TODO We need to load the new data, and classify the new data with a new network using the old ones weights
+# TODO We also need to train a network from scratch to compared with these results
+
+# Loading the new data
 ecg = np.load('sel116.npy')

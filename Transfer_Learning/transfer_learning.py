@@ -125,12 +125,12 @@ for layer in old_model.layers:
 
 # Now we create the new model, that will take advantage of the old models structure
 
-new_layer = Dense(512)(old_model.get_layer("features").output)
-new_layer = Activation("relu")(new_layer)
-new_layer = BatchNormalization()(new_layer)
-new_layer = Dropout(0.5)(new_layer)
-new_layer = Dense(10)(new_layer)
-new_layer = Activation("softmax")(new_layer)
+layer = Dense(512)(old_model.get_layer("features").output)
+layer = Activation("relu")(layer)
+layer = BatchNormalization()(layer)
+layer = Dropout(0.5)(layer)
+layer = Dense(26)(layer)
+layer = Activation("softmax")(layer)
 
 # Here we say that the model starts where the old model ends
 # and ends in the layer object
@@ -139,8 +139,29 @@ model = Model(inputs=old_model.get_layer("inputs").output, outputs=layer)
 model.compile(optimizer=SGD(lr=1e-2, momentum=0.9), loss="categorical_crossentropy",
               metrics=["accuracy"])
 
-# TODO We need to load the new data, and classify the new data with a new network using the old ones weights
-# TODO We also need to train a network from scratch to compared with these results
-
 # Loading the new data
-ecg = np.load('sel116.npy')
+new_train_x = np.load('./data/imagesLettersTrain.npy')
+new_train_y = np.load('./data/labelsTrain.npy')
+
+new_test_x = np.load('./data/imagesLettersTest.npy')
+new_test_y = np.load('./data/labelsTest.npy')
+
+# In our case we only have one input channel that is the black and white channel
+new_train_x = new_train_x.reshape((new_train_x.shape[0], 28, 28, 1))
+new_test_x = new_test_x.reshape((new_test_x.shape[0], 28, 28, 1))
+
+new_train_x = new_train_x.astype("float32") / 255.0
+new_test_x = new_test_x.astype("float32") / 255.0
+
+# We one-hot encode the trainning and testing labels
+new_train_y = keras.utils.to_categorical(new_train_y, 26)
+new_test_y = keras.utils.to_categorical(new_test_y, 26)
+
+NEW_NUM_EPOCHS = 5
+NEW_BS = 20
+
+fitting = model.fit(new_train_x, new_train_y, validation_data=(new_test_x, new_test_y), batch_size=NEW_BS,
+                    epochs=NEW_NUM_EPOCHS, callbacks=[tensorboard_callback])
+
+# TODO We also need to train a network from scratch to compared with these results
+# TODO Check the keras.evaluate method to evaluate on the test set ? (dont think its needed, since we are using the validation_data param ????)

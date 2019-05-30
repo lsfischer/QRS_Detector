@@ -20,4 +20,7 @@ QRS_Detector/logs/
 ./QRS_Detector/logs/
 QRS_Detector/logs
 ./QRS_Detector/logs
-~                             
+./QRS_Detector/processed_data/
+./QRS_Detector/processed_data
+QRS_Detector/processed_data/*
+QRS_Detector/processed_data*

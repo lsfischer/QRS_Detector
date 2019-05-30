@@ -14,7 +14,7 @@ BS = 512
 # We load the mnist data instead of the fashion_mnist data
 ((train_x, train_y), (test_x, test_y)) = keras.datasets.mnist.load_data()
 
-# In our case we only have one input channel that is the black and white channel
+# In this case we only have one input channel that is the black and white channel
 train_x = train_x.reshape((train_x.shape[0], 28, 28, 1))
 test_x = test_x.reshape((test_x.shape[0], 28, 28, 1))
 
@@ -129,6 +129,10 @@ layer = Dense(512)(old_model.get_layer("features").output)
 layer = Activation("relu")(layer)
 layer = BatchNormalization()(layer)
 layer = Dropout(0.5)(layer)
+layer = Dense(256)(layer)
+layer = Activation("relu")(layer)
+layer = BatchNormalization()(layer)
+layer = Dropout(0.2)(layer)
 layer = Dense(26)(layer)
 layer = Activation("softmax")(layer)
 
@@ -146,7 +150,7 @@ new_train_y = np.load('./data/labelsTrain.npy')
 new_test_x = np.load('./data/imagesLettersTest.npy')
 new_test_y = np.load('./data/labelsTest.npy')
 
-# In our case we only have one input channel that is the black and white channel
+# In this case we only have one input channel that is the black and white channel
 new_train_x = new_train_x.reshape((new_train_x.shape[0], 28, 28, 1))
 new_test_x = new_test_x.reshape((new_test_x.shape[0], 28, 28, 1))
 
@@ -154,14 +158,14 @@ new_train_x = new_train_x.astype("float32") / 255.0
 new_test_x = new_test_x.astype("float32") / 255.0
 
 # We one-hot encode the trainning and testing labels
+# Now we have 26 different labels so we one-hot encode a vector with size 26
 new_train_y = keras.utils.to_categorical(new_train_y, 26)
 new_test_y = keras.utils.to_categorical(new_test_y, 26)
 
-NEW_NUM_EPOCHS = 5
+NEW_NUM_EPOCHS = 10
 NEW_BS = 20
 
 fitting = model.fit(new_train_x, new_train_y, validation_data=(new_test_x, new_test_y), batch_size=NEW_BS,
                     epochs=NEW_NUM_EPOCHS, callbacks=[tensorboard_callback])
 
 # TODO We also need to train a network from scratch to compared with these results
-# TODO Check the keras.evaluate method to evaluate on the test set ? (dont think its needed, since we are using the validation_data param ????)

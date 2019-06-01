@@ -11,7 +11,7 @@ INIT_LR = 0.01
 NUM_EPOCHS = 5
 BS = 512
 
-# We load the mnist data instead of the fashion_mnist data
+# We load the mnist data instead of the mnist data
 ((train_x, train_y), (test_x, test_y)) = keras.datasets.mnist.load_data()
 
 # In this case we only have one input channel that is the black and white channel
